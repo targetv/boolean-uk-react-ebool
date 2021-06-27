@@ -1,5 +1,5 @@
 
-import { useParams } from "react-router-dom"
+import { useParams, Link } from "react-router-dom"
 import  useFetch from "../hooks/useFetch"
 
 export default function ProductDetailPage({setBasket, basket}){
@@ -16,6 +16,19 @@ export default function ProductDetailPage({setBasket, basket}){
             quantity: 1
         }
 
+      function productExist (){
+        const findProduct = basket.find(item => item.id == id)
+        
+        if(findProduct){
+          const updateBasket = basket.map(item => item.id == id ? {...item, quantity: item.quantity + 1} : item)
+          setBasket(updateBasket)
+        }
+        else{
+          const updatedBasket = [...basket, productToAdd]
+          setBasket(updatedBasket)
+        }
+      
+      }
 
 
     return(
@@ -32,12 +45,9 @@ export default function ProductDetailPage({setBasket, basket}){
               {product.description}
             </p>
             <p>{`£${product.price}`}</p>
-            {/* <!-- Once you click in this button, the user should be redirected to the Basket page --> */}
-            <button onClick={() => {
-                
-                const updatedBasket = [...basket, productToAdd]
-                setBasket(updatedBasket)
-            }}>Add to basket</button>
+            <Link to="/basket" onClick={() => {
+                productExist()
+            }}><button>Add to basket</button></Link>
           </div>
         </section>
       </main>
